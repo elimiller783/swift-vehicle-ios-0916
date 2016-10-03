@@ -16,18 +16,18 @@ class Plane: Vehicle {
             return true
         } else {
             return false
+        }
     }
-    }
-
+    
     init(name: String, weight: Double, maxSpeed: Double, maxAltitude: Double) {
         self.maxAltitude = maxAltitude
         super.init(name: name, weight: weight, maxSpeed: maxSpeed)
     }
-
-    func takeOff() {
+    
+    func takeoff() {
         if inFlight == false {
-            speed += 0.10 * maxSpeed
-            altitude += 0.10 * altitude
+            speed += 0.10 * super.maxSpeed
+            altitude += 0.10 * self.maxAltitude
         }
     }
     func land() {
@@ -38,26 +38,45 @@ class Plane: Vehicle {
     func climb() {
         if inFlight == true && altitude < maxAltitude {
             altitude += 0.10 * maxAltitude
+            decelerate()
         }
     }
     
     func dive() {
-        if altitude > 0 && inFlight == true {
-            if speed >= 0 && inFlight == true {
+        if (altitude > 0 && inFlight == true) || (speed >= 0 && altitude > 0) {
             altitude -= 0.10 * maxAltitude
-
+            super.accelerate()
         }
-           }
-}
-
+    }
+    
+    
+    
+    
+    
     func bankRight() {
         if inFlight == true {
-            heading += 45
-            speed -= 0.10 * speed 
+            if (heading < 360 && heading >= 0) {
+                super.heading += 45
+                speed -= (0.10 * speed)
+                
+            } else {
+                if heading == 360 {
+                    heading = 0
+                }
+            }
         }
-        
     }
-
-
-
+    
+    func bankLeft() {
+        if inFlight == true && super.heading <= 360 && super.heading >= 0 {
+            speed -= 0.10 * speed
+            super.heading -= 45
+        }
+        if super.heading <= 0 && inFlight == true {
+            super.heading = abs(super.heading + 360)
+        }
+//        if super.heading <= 360 && super.heading >= 0 {
+//            super.heading -= 45
+//        }
+    }
 }
